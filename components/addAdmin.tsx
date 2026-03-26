@@ -1,0 +1,64 @@
+import ModalOverlay from "@/components/model";
+
+export default function AddAdmin() {
+  return (
+    <ModalOverlay>
+      <div className="text-center mb-6">
+        <div className="relative w-16 h-16 rounded-full bg-blue-100 flex items-center justify-center text-3xl mx-auto mb-3">
+          👤
+          <span
+            className="absolute inset-0 rounded-full border-2 border-blue-400"
+            style={{ animation: "pingRing 1.4s ease-out infinite" }}
+          />
+        </div>
+        <h2 className="text-2xl font-bold text-slate-800">Add New Admin</h2>
+        <p className="text-slate-400 text-sm mt-1">
+          Grant administrative access to a new user
+        </p>
+      </div>
+      {[
+        {
+          k: "username",
+          label: "Username",
+          type: "text",
+          ph: "e.g. bursar_john",
+        },
+        { k: "email", label: "Email", type: "email", ph: "user@gouni.edu.ng" },
+        { k: "password", label: "Password", type: "password", ph: "••••••••" },
+      ].map((f) => (
+        <div key={f.k} className="mb-4">
+          <label className="block text-xs font-bold text-blue-600 uppercase tracking-widest mb-1.5">
+            {f.label}
+          </label>
+          <input
+            type={f.type}
+            placeholder={f.ph}
+            // value={addForm[f.k]}
+            // onChange={(e) =>
+            //   setAddForm((p) => ({ ...p, [f.k]: e.target.value }))
+            // }
+            className="w-full border border-slate-200 rounded-xl px-4 py-3 text-sm bg-slate-50 focus:outline-none focus:ring-2 focus:ring-blue-400 text-slate-800 placeholder-slate-400"
+          />
+        </div>
+      ))}
+      {/* {addErr && <p className="text-red-500 text-sm mb-3">⚠ {addErr}</p>} */}
+      <div className="flex gap-3 mt-2">
+        <button
+          // onClick={() => {
+          //   setAddAdminOpen(false);
+          //   setAddErr("");
+          // }}
+          className="flex-1 py-3 rounded-xl border border-slate-200 text-slate-600 text-sm font-semibold hover:bg-slate-50 transition"
+        >
+          Cancel
+        </button>
+        <button
+          // onClick={handleAddAdmin}
+          className="flex-1 py-3 rounded-xl bg-blue-600 hover:bg-blue-700 text-white text-sm font-bold transition shadow-lg shadow-blue-200"
+        >
+          Add Admin →
+        </button>
+      </div>
+    </ModalOverlay>
+  );
+}
