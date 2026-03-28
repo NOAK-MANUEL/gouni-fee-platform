@@ -15,13 +15,19 @@ export async function middleware(req: NextRequest) {
       return NextResponse.redirect(new URL("/auth/admin-login", req.url));
     }
     const currentDate = new Date(date).getTime();
-    if (Date.now() > currentDate)
+
+    if (!currentDate) {
       return NextResponse.redirect(new URL("/auth/admin-login", req.url));
+    }
+
+    if (Date.now() > currentDate) {
+      return NextResponse.redirect(new URL("/auth/admin-login", req.url));
+    }
   }
 
   return NextResponse.next();
 }
 
 export const config = {
-  matcher: ["/account/:path*", "/upload/:path*"],
+  matcher: ["/admin"],
 };

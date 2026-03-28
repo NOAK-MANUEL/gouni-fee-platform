@@ -154,9 +154,15 @@ export const isAdmin = async (): Promise<Admin | null> => {
   if (!data) return null;
   const { username, password, email, date } = JSON.parse(data.value);
   if (!username || !password || !date) return null;
-  const lastDate = new Date(date).getTime();
-  const currentDate = Date.now();
-  if (lastDate < currentDate) return null;
+  const currentDate = new Date(date).getTime();
+
+  if (!currentDate) {
+    return null;
+  }
+
+  if (Date.now() > currentDate) {
+    return null;
+  }
   return {
     username,
     email,
