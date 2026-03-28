@@ -1,36 +1,39 @@
 "use client";
-import { FACULTIES } from "@/lib/components/faculties";
-import { fmt, getLevels, OTHER_FEES } from "@/lib/components/resources";
-import { useState } from "react";
+import {
+  getFaculties,
+  getLevelsData,
+  getPrograms,
+  saveData,
+} from "@/lib/actions";
+import { fmt, OTHER_FEES } from "@/lib/components/resources";
+import { useEffect, useState } from "react";
 
 export default function FeesPage() {
   interface ResultType {
-    tuition: number | null;
+    tuition: bigint | null;
     lvl: number;
     other: number;
-    total: number;
+    total: bigint | number;
   }
+  type Level = { fee: bigint; level: number };
+
   const [selFaculty, setSelFaculty] = useState("");
   const [selProgram, setSelProgram] = useState("");
   const [selLevel, setSelLevel] = useState("");
   const [result, setResult] = useState<ResultType | null>();
   const [searched, setSearched] = useState(false);
-
-  const faculties = Object.keys(FACULTIES);
-  const programs = selFaculty
-    ? Object.keys(FACULTIES[selFaculty].programs)
-    : [];
-  const levels = selFaculty ? getLevels(selFaculty) : [];
-
+  const [faculties, setFaculties] = useState<string[]>([]);
+  const [programs, setPrograms] = useState<string[]>([]);
+  const [levels, setLevels] = useState<Level[]>([]);
   const handleSearch = () => {
     if (!selFaculty || !selProgram || !selLevel) return;
     const lvl = parseInt(selLevel);
-    const tuition = FACULTIES[selFaculty].programs[selProgram][lvl] ?? null;
+    const tuition = levels.find((level) => level.level === lvl)?.fee ?? null;
     const other = OTHER_FEES[lvl] ?? 0;
     setResult({
       tuition,
       other,
-      total: tuition != null ? tuition + other : 0,
+      total: tuition != null ? tuition + BigInt(other) : 0,
       lvl,
     });
     setSearched(true);
@@ -54,6 +57,30 @@ export default function FeesPage() {
     { label: "Community Service Levy", amount: 2000 },
     { label: "Bazaar Levy", amount: 1000 },
   ];
+  useEffect(() => {
+    getFaculties().then((res) => {
+      if (res.success) {
+        setFaculties(res.faculties);
+      }
+    });
+  }, []);
+  const selectPrograms = (faculty: string) => {
+    getPrograms(faculty).then((res) => {
+      if (res.success) {
+        setPrograms(res.programs);
+        setSelFaculty(faculty);
+      }
+    });
+  };
+  const selectLevel = (program: string) => {
+    getLevelsData(program).then((res) => {
+      if (res.success) {
+        setLevels(res.levels);
+        setSelProgram(program);
+        setSelLevel(res.levels[0].level.toString());
+      }
+    });
+  };
 
   return (
     <main className="min-h-screen bg-slate-50 py-10 px-4 sm:px-6">
@@ -92,9 +119,10 @@ export default function FeesPage() {
                   className="w-full border border-slate-200 rounded-xl px-4 py-3 text-sm text-slate-700 bg-slate-50 focus:outline-none focus:ring-2 focus:ring-blue-400 appearance-none pr-8"
                   value={selFaculty}
                   onChange={(e) => {
-                    setSelFaculty(e.target.value);
+                    selectPrograms(e.target.value);
                     setSelProgram("");
                     setSelLevel("");
+                    setLevels([]);
                     setResult(null);
                     setSearched(false);
                   }}
@@ -102,7 +130,7 @@ export default function FeesPage() {
                   <option value="">— Select Faculty —</option>
                   {faculties.map((f) => (
                     <option key={f} value={f}>
-                      {FACULTIES[f].icon} {f}
+                      {f}
                     </option>
                   ))}
                 </select>
@@ -120,13 +148,12 @@ export default function FeesPage() {
                   className="w-full border border-slate-200 rounded-xl px-4 py-3 text-sm text-slate-700 bg-slate-50 focus:outline-none focus:ring-2 focus:ring-blue-400 appearance-none pr-8 disabled:opacity-40 disabled:cursor-not-allowed"
                   value={selProgram}
                   onChange={(e) => {
-                    setSelProgram(e.target.value);
+                    selectLevel(e.target.value);
                     setResult(null);
                     setSearched(false);
                   }}
                   disabled={!selFaculty}
                 >
-                  <option value="">— Select Programme —</option>
                   {programs.map((p) => (
                     <option key={p} value={p}>
                       {p}
@@ -153,10 +180,9 @@ export default function FeesPage() {
                   }}
                   disabled={!selFaculty}
                 >
-                  <option value="">— Select Level —</option>
                   {levels.map((l) => (
-                    <option key={l} value={l}>
-                      {l} Level
+                    <option key={l.level} value={l.level}>
+                      {l.level} Level
                     </option>
                   ))}
                 </select>

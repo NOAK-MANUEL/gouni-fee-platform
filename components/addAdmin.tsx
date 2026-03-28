@@ -1,8 +1,41 @@
+"use client";
+import LoadingSpinner from "@/components/loading";
 import ModalOverlay from "@/components/model";
+import { createAdmin } from "@/lib/actions";
+import { Dispatch, SetStateAction, useState } from "react";
 
-export default function AddAdmin() {
+export default function AddAdmin({
+  close,
+  setClose,
+}: {
+  close: boolean;
+  setClose: Dispatch<SetStateAction<boolean>>;
+}) {
+  interface FormSchema {
+    username: string;
+    password: string;
+    email: string;
+  }
+  const [loading, setLoading] = useState(false);
+  const [addForm, setAddForm] = useState<FormSchema>({
+    username: "",
+    password: "",
+    email: "",
+  });
+  const [addErr, setAddErr] = useState<string>();
+  const handleAddAdmin = async () => {
+    setLoading(true);
+    const res = await createAdmin(
+      addForm.username,
+      addForm.email,
+      addForm.password,
+    );
+    setLoading(false);
+    if (!res.success) return setAddErr(res.message);
+    setClose(!close);
+  };
   return (
-    <ModalOverlay>
+    <ModalOverlay close={close} setClose={setClose}>
       <div className="text-center mb-6">
         <div className="relative w-16 h-16 rounded-full bg-blue-100 flex items-center justify-center text-3xl mx-auto mb-3">
           👤
@@ -33,30 +66,31 @@ export default function AddAdmin() {
           <input
             type={f.type}
             placeholder={f.ph}
-            // value={addForm[f.k]}
-            // onChange={(e) =>
-            //   setAddForm((p) => ({ ...p, [f.k]: e.target.value }))
-            // }
+            value={addForm[f.k as keyof FormSchema]}
+            onChange={(e) =>
+              setAddForm((p) => ({ ...p, [f.k]: e.target.value }))
+            }
             className="w-full border border-slate-200 rounded-xl px-4 py-3 text-sm bg-slate-50 focus:outline-none focus:ring-2 focus:ring-blue-400 text-slate-800 placeholder-slate-400"
           />
         </div>
       ))}
-      {/* {addErr && <p className="text-red-500 text-sm mb-3">⚠ {addErr}</p>} */}
+      {addErr && <p className="text-red-500 text-sm mb-3">⚠ {addErr}</p>}
       <div className="flex gap-3 mt-2">
         <button
-          // onClick={() => {
-          //   setAddAdminOpen(false);
-          //   setAddErr("");
-          // }}
+          onClick={() => {
+            setClose(false);
+            setAddErr("");
+          }}
           className="flex-1 py-3 rounded-xl border border-slate-200 text-slate-600 text-sm font-semibold hover:bg-slate-50 transition"
         >
           Cancel
         </button>
         <button
-          // onClick={handleAddAdmin}
+          disabled={loading}
+          onClick={handleAddAdmin}
           className="flex-1 py-3 rounded-xl bg-blue-600 hover:bg-blue-700 text-white text-sm font-bold transition shadow-lg shadow-blue-200"
         >
-          Add Admin →
+          {loading ? <LoadingSpinner /> : "Add Admin →"}
         </button>
       </div>
     </ModalOverlay>

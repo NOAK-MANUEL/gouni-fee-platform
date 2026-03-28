@@ -1,11 +1,10 @@
 import type { Metadata } from "next";
-import { Playfair_Display } from "next/font/google";
 import "./globals.css";
 import Navbar from "@/components/navbar";
+import { Inter } from "next/font/google";
 
-const playfair = Playfair_Display({
+const inter = Inter({
   subsets: ["latin"],
-  weight: ["400", "700"],
 });
 
 export const metadata: Metadata = {
@@ -19,7 +18,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className={`${playfair.className} h-full antialiased`}>
+    <html lang="en" className={`${inter.className} h-full antialiased`}>
       <body className="min-h-full flex flex-col">
         <Navbar />
         {children}

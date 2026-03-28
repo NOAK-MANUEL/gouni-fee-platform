@@ -1,0 +1,48 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mongodb"
+  url      = env("DATABASE_URL")
+}
+
+model Faculties {
+        id String @id @default(auto()) @map("_id") @db.ObjectId
+ name String @unique
+  programs Programs[]
+}
+
+model Programs {
+        id String @id @default(auto()) @map("_id") @db.ObjectId
+  name String @unique
+  faculty_name String
+  levels Levels[]
+
+  faculty Faculties @relation(fields: [faculty_name],references: [name])
+}
+
+model Levels {
+        id String @id @default(auto()) @map("_id") @db.ObjectId
+  level Int
+  program_name String
+  fee BigInt
+  program Programs @relation(fields: [program_name],references: [name])
+  @@unique([level,program_name])
+}
+
+model Admin {
+        id String @id @default(auto()) @map("_id") @db.ObjectId
+  username String @unique
+  email String @unique
+  password String
+  onBlock Boolean @default(false)
+  created_at DateTime @default(now())
+}
+

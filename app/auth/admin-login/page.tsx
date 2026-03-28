@@ -1,5 +1,7 @@
 "use client";
 
+import LoadingSpinner from "@/components/loading";
+import { logAdmin } from "@/lib/actions";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 
@@ -10,13 +12,21 @@ export default function AdminLoginPage() {
   });
   const [loginErr, setLoginErr] = useState<string>();
   const navigate = useRouter();
+  const [loading, setLoading] = useState(false);
 
   const handleLogin = () => {
-    if (loginForm.username !== loginForm.password) {
+    if (!loginForm.username || !loginForm.password) {
       setLoginErr("Username or Password Incorrect");
       return;
     }
-    navigate.replace("/admin");
+    setLoading(true);
+    logAdmin(loginForm.username, loginForm.password).then((res) => {
+      if (res.success) {
+        return navigate.replace("/admin");
+      }
+      setLoading(false);
+      setLoginErr(res.message);
+    });
   };
   return (
     <main className="min-h-screen bg-slate-50 flex items-center justify-center px-4 py-16">
@@ -68,21 +78,12 @@ export default function AdminLoginPage() {
             <p className="text-red-500 text-sm mb-4">⚠ {loginErr}</p>
           )}
           <button
+            disabled={loading}
             onClick={handleLogin}
             className="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-3.5 rounded-xl transition shadow-lg shadow-blue-200 mt-2 text-sm"
           >
-            Sign In →
+            {loading ? <LoadingSpinner /> : "Sign In"}
           </button>
-          <p className="text-center text-xs text-slate-400 mt-5">
-            Demo:{" "}
-            <code className="bg-slate-100 px-1.5 py-0.5 rounded text-slate-600">
-              admin
-            </code>{" "}
-            /{" "}
-            <code className="bg-slate-100 px-1.5 py-0.5 rounded text-slate-600">
-              admin123
-            </code>
-          </p>
         </div>
       </div>
     </main>

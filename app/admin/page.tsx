@@ -1,7 +1,18 @@
 "use client";
+import AddAdmin from "@/components/addAdmin";
+import EditFee from "@/components/editFee";
+import {
+  FacultyData,
+  getFaculties,
+  getPrograms,
+  isAdmin,
+  Level,
+  ProgramData,
+} from "@/lib/actions";
 import { FACULTIES } from "@/lib/components/faculties";
 import { fmt, getLevels } from "@/lib/components/resources";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 
 export default function AdminDashboard() {
@@ -9,18 +20,36 @@ export default function AdminDashboard() {
     username: string;
     email: string;
   }
-  const [loggedAdmin, setLoggedAdmin] = useState<adminType | null>({
-    username: "noak",
-    email: "sooo",
-  });
+  const [edit, setOpenEdit] = useState(false);
+  const [loggedAdmin, setLoggedAdmin] = useState<adminType | null>();
   const [addAdmin, setAddAdmin] = useState(false);
+  const [selProgram, setSelProgram] = useState<string>("");
+  const [selLevel, setSelLevel] = useState<Level>();
+  const [faculties, setFaculties] = useState<FacultyData[]>([]);
   const [openFaculty, setOpenFaculty] = useState<string | null>("");
+  const [programs, setPrograms] = useState<ProgramData[]>([]);
+  const navigate = useRouter();
+  useEffect(() => {
+    isAdmin()
+      .then((res) => {
+        if (!res) return navigate.replace("/auth/admin-login");
+        setLoggedAdmin(res);
+      })
+      .catch(() => navigate.replace("/auth/admin-login"));
+    getFaculties().then((res) => {
+      if (!res.success) {
+        return alert(res.message);
+      }
+      setFaculties(res.facultiesData);
+    });
+  }, [navigate]);
 
-  const totalProgs = Object.values(FACULTIES).reduce(
-    (a, f) => a + Object.keys(f.programs).length,
-    0,
-  );
-  useEffect(() => {}, []);
+  const callPrograms = (faculty: string) => {
+    getPrograms(faculty).then((res) => {
+      if (!res.success) return alert(res.message);
+      setPrograms(res.programData);
+    });
+  };
 
   return (
     loggedAdmin && (
@@ -88,7 +117,8 @@ export default function AdminDashboard() {
                 Fees <span className="text-blue-600">Dashboard</span>
               </h1>
               <p className="text-slate-400 text-sm mt-1">
-                2025/2026 Academic Session
+                {new Date().getFullYear() - 1}/{new Date().getFullYear()}{" "}
+                Academic Session
               </p>
             </div>
             <div className="flex flex-wrap gap-2">
@@ -121,14 +151,16 @@ export default function AdminDashboard() {
               {
                 icon: "🏛️",
                 label: "Faculties",
-                value: Object.keys(FACULTIES).length,
+                value: faculties.length,
                 bg: "bg-blue-50",
                 tc: "text-blue-600",
               },
               {
                 icon: "📚",
                 label: "Programmes",
-                value: totalProgs,
+                value: faculties
+                  .map((faculty) => faculty._count.programs)
+                  .reduce((p, c) => p + c, 0),
                 bg: "bg-sky-50",
                 tc: "text-sky-600",
               },
@@ -180,28 +212,31 @@ export default function AdminDashboard() {
           </div>
 
           <div className="space-y-3">
-            {Object.entries(FACULTIES).map(([faculty, fData]) => {
-              const isOpen = openFaculty === faculty;
-              const levels = getLevels(faculty);
+            {faculties.map((faculty) => {
+              const isOpen = openFaculty === faculty.name;
+              const levels = getLevels(faculty.name);
               return (
                 <div
-                  key={faculty}
+                  key={faculty.name}
                   className="bg-white rounded-2xl border border-slate-100 shadow-sm overflow-hidden"
                 >
                   <button
-                    onClick={() => setOpenFaculty(isOpen ? null : faculty)}
+                    onClick={() => {
+                      callPrograms(faculty.name);
+                      setOpenFaculty(isOpen ? null : faculty.name);
+                    }}
                     className="w-full flex items-center justify-between px-5 py-4 hover:bg-slate-50 transition text-left"
                   >
                     <div className="flex items-center gap-3 min-w-0">
                       <div className="w-9 h-9 rounded-xl bg-blue-50 flex items-center justify-center text-lg flex-shrink-0">
-                        {fData.icon}
+                        {FACULTIES[faculty.name].icon}
                       </div>
                       <div className="min-w-0">
                         <div className="font-semibold text-slate-800 text-sm truncate">
-                          {faculty}
+                          {faculty.name}
                         </div>
                         <div className="text-slate-400 text-xs">
-                          {Object.keys(fData.programs).length} programmes
+                          {faculty._count.programs} programmes
                         </div>
                       </div>
                     </div>
@@ -212,7 +247,7 @@ export default function AdminDashboard() {
                     </span>
                   </button>
 
-                  {isOpen && (
+                  {isOpen && programs && (
                     <div
                       className="border-t border-slate-100"
                       style={{ animation: "slideDown 0.25s ease" }}
@@ -245,58 +280,53 @@ export default function AdminDashboard() {
                             </tr>
                           </thead>
                           <tbody className="divide-y divide-slate-50">
-                            {Object.entries(fData.programs).map(
-                              ([prog, levelFees]) => (
-                                <tr
-                                  key={prog}
-                                  className="hover:bg-blue-50/30 transition"
-                                >
-                                  <td className="px-5 py-3.5 text-sm font-medium text-slate-700 max-w-[200px]">
-                                    <span
-                                      className="block"
-                                      style={{
-                                        whiteSpace: "normal",
-                                        wordBreak: "break-word",
-                                      }}
-                                    >
-                                      {prog}
-                                    </span>
+                            {programs.map((prog) => (
+                              <tr
+                                key={prog.name}
+                                className="hover:bg-blue-50/30 transition"
+                              >
+                                <td className="px-5 py-3.5 text-sm font-medium text-slate-700 max-w-[200px]">
+                                  <span
+                                    className="block"
+                                    style={{
+                                      whiteSpace: "normal",
+                                      wordBreak: "break-word",
+                                    }}
+                                  >
+                                    {prog.name}
+                                  </span>
+                                </td>
+                                {prog.levels.map((l) => (
+                                  <td
+                                    key={l.level}
+                                    className="px-4 py-3.5 text-sm text-right font-mono text-slate-600 whitespace-nowrap"
+                                  >
+                                    {l.fee != null ? (
+                                      fmt(l.fee)
+                                    ) : (
+                                      <span className="text-slate-200">—</span>
+                                    )}
                                   </td>
-                                  {levels.map((l) => (
-                                    <td
-                                      key={l}
-                                      className="px-4 py-3.5 text-sm text-right font-mono text-slate-600 whitespace-nowrap"
-                                    >
-                                      {levelFees[l] != null ? (
-                                        fmt(levelFees[l])
-                                      ) : (
-                                        <span className="text-slate-200">
-                                          —
-                                        </span>
-                                      )}
-                                    </td>
-                                  ))}
-                                  <td className="px-4 py-3.5">
-                                    <div className="flex gap-1.5 justify-center flex-wrap">
-                                      {levels
-                                        .filter((l) => levelFees[l] != null)
-                                        .map((l) => (
-                                          <button
-                                            key={l}
-                                            onClick={
-                                              () => {}
-                                              // openEditFee(faculty, prog, l)
-                                            }
-                                            className="bg-blue-50 hover:bg-blue-600 hover:text-white text-blue-600 border border-blue-200 text-xs font-bold px-2.5 py-1 rounded-lg transition whitespace-nowrap"
-                                          >
-                                            {l}L
-                                          </button>
-                                        ))}
-                                    </div>
-                                  </td>
-                                </tr>
-                              ),
-                            )}
+                                ))}
+                                <td className="px-4 py-3.5">
+                                  <div className="flex gap-1.5 justify-center flex-wrap">
+                                    {prog.levels.map((l) => (
+                                      <button
+                                        key={l.level}
+                                        onClick={() => {
+                                          setOpenEdit(!edit);
+                                          setSelProgram(prog.name);
+                                          setSelLevel(l);
+                                        }}
+                                        className="bg-blue-50 hover:bg-blue-600 hover:text-white text-blue-600 border border-blue-200 text-xs font-bold px-2.5 py-1 rounded-lg transition whitespace-nowrap"
+                                      >
+                                        {l.level}L
+                                      </button>
+                                    ))}
+                                  </div>
+                                </td>
+                              </tr>
+                            ))}
                           </tbody>
                         </table>
                       </div>
@@ -311,6 +341,16 @@ export default function AdminDashboard() {
             GoUni Fees Portal Admin · {new Date().getFullYear()}
           </div>
         </main>
+        {addAdmin && <AddAdmin close={addAdmin} setClose={setAddAdmin} />}
+        {edit && selLevel && (
+          <EditFee
+            faculty={openFaculty || ""}
+            program={selProgram}
+            setProgram={setPrograms}
+            level={selLevel}
+            setEditFeeOpen={setOpenEdit}
+          />
+        )}
       </div>
     )
   );

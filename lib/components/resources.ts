@@ -14,5 +14,5 @@ export const getLevels = (faculty: string) => {
   return [100, 200, 300, 400];
 };
 
-export const fmt = (n: number) =>
+export const fmt = (n: number | bigint) =>
   n != null ? "₦" + n.toLocaleString("en-NG") : "—";

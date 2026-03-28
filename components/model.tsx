@@ -1,14 +1,19 @@
 "use client";
-import { useEffect, useState } from "react";
+import { Dispatch, SetStateAction, useEffect, useState } from "react";
 
 export default function ModalOverlay({
   children,
+  close,
+  setClose,
 }: Readonly<{
   children: React.ReactNode;
+  close?: boolean;
+  setClose: Dispatch<SetStateAction<boolean>>;
 }>) {
-  const [close, setClose] = useState(false);
+  // const [close, setClose] = useState(false);
   const onClose = () => {
     setClose(!close);
+    console.log("yes");
   };
   useEffect(() => {
     document.body.style.overflow = "hidden";
