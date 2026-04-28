@@ -33,6 +33,9 @@ type LevelResponse =
   | { success: false; message: string };
 type Admin = { username: string; email: string };
 type AdminResponse = { success: true } | { success: false; message: string };
+export const signout = async () => {
+  (await cookies()).delete("_a");
+};
 export const getFaculties = async (): Promise<FacultyResponse> => {
   try {
     const faculties = await prismaClient.faculties.findMany({

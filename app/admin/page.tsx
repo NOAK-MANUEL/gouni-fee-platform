@@ -8,6 +8,7 @@ import {
   isAdmin,
   Level,
   ProgramData,
+  signout,
 } from "@/lib/actions";
 import { FACULTIES } from "@/lib/components/faculties";
 import { fmt, getLevels } from "@/lib/components/resources";
@@ -92,8 +93,9 @@ export default function AdminDashboard() {
               </div>
             </div>
             <button
-              onClick={() => {
-                setLoggedAdmin(null);
+              onClick={async () => {
+                await signout();
+                navigate.replace("/");
               }}
               className="w-full py-2.5 rounded-xl border border-slate-200 text-slate-500 text-sm font-semibold hover:bg-slate-50 transition"
             >
@@ -135,8 +137,9 @@ export default function AdminDashboard() {
                 View Site ↗
               </Link>
               <button
-                onClick={() => {
-                  setLoggedAdmin(null);
+                onClick={async () => {
+                  await signout();
+                  navigate.replace("/");
                 }}
                 className="md:hidden border border-red-200 text-red-500 hover:bg-red-50 font-semibold px-5 py-2.5 rounded-full text-sm transition"
               >

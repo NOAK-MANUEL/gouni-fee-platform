@@ -22,6 +22,9 @@ export default function RootLayout({
       <body className="min-h-full flex flex-col">
         <Navbar />
         {children}
+        <footer className="text-center  bg-white/95 backdrop-blur border-t text-sm  border-slate-100 shadow-sm">
+          Powered By GOUNI ICT Service
+        </footer>
       </body>
     </html>
   );

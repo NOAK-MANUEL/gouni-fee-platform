@@ -1,10 +1,5 @@
 "use client";
-import {
-  getFaculties,
-  getLevelsData,
-  getPrograms,
-  saveData,
-} from "@/lib/actions";
+import { getFaculties, getLevelsData, getPrograms } from "@/lib/actions";
 import { fmt, OTHER_FEES } from "@/lib/components/resources";
 import { useEffect, useState } from "react";
 
@@ -69,6 +64,9 @@ export default function FeesPage() {
       if (res.success) {
         setPrograms(res.programs);
         setSelFaculty(faculty);
+        setSelProgram(res.programs[0]);
+        setLevels(res.programData[0].levels);
+        setSelLevel(res.programData[0].levels[0].level.toString());
       }
     });
   };
