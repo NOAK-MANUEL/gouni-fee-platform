@@ -58,13 +58,16 @@ export const getFaculties = async (): Promise<FacultyResponse> => {
   }
 };
 export const getPrograms = async (
-  faculty: string,
+  faculty?: string,
 ): Promise<ProgramResponse> => {
   try {
     const programs = await prismaClient.programs.findMany({
-      where: {
-        faculty_name: faculty,
-      },
+      ...(faculty && {
+        where: {
+          faculty_name: faculty,
+        },
+      }),
+
       orderBy: {
         name: "asc",
       },

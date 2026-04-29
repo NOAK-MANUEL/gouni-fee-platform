@@ -12,16 +12,16 @@ export default function FeesPage() {
   }
   type Level = { fee: bigint; level: number };
 
-  const [selFaculty, setSelFaculty] = useState("");
+  // const [selFaculty, setSelFaculty] = useState("");
   const [selProgram, setSelProgram] = useState("");
   const [selLevel, setSelLevel] = useState("");
   const [result, setResult] = useState<ResultType | null>();
   const [searched, setSearched] = useState(false);
-  const [faculties, setFaculties] = useState<string[]>([]);
+  // const [faculties, setFaculties] = useState<string[]>([]);
   const [programs, setPrograms] = useState<string[]>([]);
   const [levels, setLevels] = useState<Level[]>([]);
   const handleSearch = () => {
-    if (!selFaculty || !selProgram || !selLevel) return;
+    if (!selProgram || !selLevel) return;
     const lvl = parseInt(selLevel);
     const tuition = levels.find((level) => level.level === lvl)?.fee ?? null;
     const other = OTHER_FEES[lvl] ?? 0;
@@ -53,23 +53,24 @@ export default function FeesPage() {
     { label: "Bazaar Levy", amount: 1000 },
   ];
   useEffect(() => {
-    getFaculties().then((res) => {
-      if (res.success) {
-        setFaculties(res.faculties);
-      }
-    });
-  }, []);
-  const selectPrograms = (faculty: string) => {
-    getPrograms(faculty).then((res) => {
+    // getFaculties().then((res) => {
+    //   if (res.success) {
+    //     setFaculties(res.faculties);
+    //   }
+    // });
+    getPrograms().then((res) => {
       if (res.success) {
         setPrograms(res.programs);
-        setSelFaculty(faculty);
+        //  setSelFaculty(faculty);
         setSelProgram(res.programs[0]);
         setLevels(res.programData[0].levels);
         setSelLevel(res.programData[0].levels[0].level.toString());
       }
     });
-  };
+  }, []);
+  // const selectPrograms = (faculty: string) => {
+
+  // };
   const selectLevel = (program: string) => {
     getLevelsData(program).then((res) => {
       if (res.success) {
@@ -107,8 +108,8 @@ export default function FeesPage() {
 
         {/* Form */}
         <div className="bg-white rounded-2xl border border-slate-100 shadow-sm p-6 sm:p-8 mb-6">
-          <div className="grid sm:grid-cols-3 gap-4 mb-6">
-            <div>
+          <div className="grid sm:grid-cols-3 gap-6 mb-6 ">
+            {/* <div>
               <label className="block text-xs font-bold text-blue-600 uppercase tracking-widest mb-2">
                 Faculty
               </label>
@@ -136,7 +137,7 @@ export default function FeesPage() {
                   ▼
                 </div>
               </div>
-            </div>
+            </div> */}
             <div>
               <label className="block text-xs font-bold text-blue-600 uppercase tracking-widest mb-2">
                 Programme
@@ -150,8 +151,10 @@ export default function FeesPage() {
                     setResult(null);
                     setSearched(false);
                   }}
-                  disabled={!selFaculty}
+                  // disabled={!selFaculty}
                 >
+                  <option value="">— Select Program —</option>
+
                   {programs.map((p) => (
                     <option key={p} value={p}>
                       {p}
@@ -176,7 +179,7 @@ export default function FeesPage() {
                     setResult(null);
                     setSearched(false);
                   }}
-                  disabled={!selFaculty}
+                  disabled={!selProgram}
                 >
                   {levels.map((l) => (
                     <option key={l.level} value={l.level}>
@@ -192,7 +195,7 @@ export default function FeesPage() {
           </div>
           <button
             onClick={handleSearch}
-            disabled={!selFaculty || !selProgram || !selLevel}
+            disabled={!selProgram || !selLevel}
             className="w-full sm:w-auto bg-blue-600 hover:bg-blue-700 disabled:bg-slate-300 disabled:cursor-not-allowed text-white font-bold px-10 py-3.5 rounded-full transition shadow-lg shadow-blue-200/50 text-sm"
           >
             Search Fees →
@@ -228,7 +231,7 @@ export default function FeesPage() {
                         {selProgram}
                       </div>
                       <div className="text-blue-200 text-sm mt-1">
-                        {selFaculty} · {selLevel} Level
+                        {selLevel} Level
                       </div>
                     </div>
                     <div className="sm:text-right">
@@ -310,7 +313,7 @@ export default function FeesPage() {
                   Additional professional fees (Lab, ICAN, DNALC, etc.) may
                   apply. Pay only via the official{" "}
                   <a
-                    href="https://student.erp.gouni.edu.ng"
+                    href="https://student.erp.gouni.edu.ng/payment/generate-invoice"
                     target="_blank"
                     className="underline font-semibold"
                   >
