@@ -22,7 +22,7 @@ export default function RootLayout({
       <body className="min-h-full flex flex-col">
         <Navbar />
         {children}
-        <footer className="text-center  bg-white/95 backdrop-blur border-t text-sm  border-slate-100 shadow-sm text-gray-500 p-3">
+        <footer className="text-center   border-t text-sm  border-slate-100 shadow-sm text-white p-3 bg-blue-600 font-bold">
           Powered By GOUNI ICT Service
         </footer>
       </body>

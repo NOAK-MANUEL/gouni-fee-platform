@@ -84,20 +84,20 @@ export const FACULTIES: Faculties = {
         300: 740000,
         400: 750000,
       },
-    },
-  },
-  "Architecture & Design": {
-    icon: "🏛️",
-    programs: {
       Architecture: { 100: 870000, 200: 870000, 300: 820000, 400: 830000 },
-      "Industrial Design": {
-        100: 870000,
-        200: 870000,
-        300: 820000,
-        400: 830000,
-      },
     },
   },
+  // "Architecture & Design": {
+  //   icon: "🏛️",
+  //   programs: {
+  //     "Industrial Design": {
+  //       100: 870000,
+  //       200: 870000,
+  //       300: 820000,
+  //       400: 830000,
+  //     },
+  //   },
+  // },
   "Computing & IT": {
     icon: "💻",
     programs: {
