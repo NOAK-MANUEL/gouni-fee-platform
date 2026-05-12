@@ -314,7 +314,7 @@ export default function FeesPage() {
                   Additional professional fees (Lab, ICAN, DNALC, etc.) may
                   apply. Pay only via the official{" "}
                   <a
-                    href="https://student.erp.gouni.edu.ng/payment/generate-invoice"
+                    href="https://student.erp.gouni.edu.ng"
                     target="_blank"
                     className="underline font-semibold"
                   >

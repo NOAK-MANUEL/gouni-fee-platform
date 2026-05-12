@@ -107,6 +107,9 @@ export const getLevelsData = async (
         level: true,
         fee: true,
       },
+      orderBy: {
+        level: "asc",
+      },
     });
     return {
       success: true,
