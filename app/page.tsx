@@ -73,8 +73,8 @@ export default function HomePage() {
         <div className="max-w-5xl mx-auto px-4 sm:px-6">
           <div className="grid grid-cols-2 sm:grid-cols-4">
             {[
-              { v: "8", l: "Faculties" },
-              { v: "50+", l: "Programmes" },
+              { v: "7", l: "Faculties" },
+              { v: "45+", l: "Programmes" },
               {
                 v: `${session}`,
                 l: "Session",
