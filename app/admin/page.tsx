@@ -119,8 +119,7 @@ export default function AdminDashboard() {
                 Fees <span className="text-blue-600">Dashboard</span>
               </h1>
               <p className="text-slate-400 text-sm mt-1">
-                {new Date().getFullYear() - 1}/{new Date().getFullYear()}{" "}
-                Academic Session
+                2026/2027 Academic Session
               </p>
             </div>
             <div className="flex flex-wrap gap-2">

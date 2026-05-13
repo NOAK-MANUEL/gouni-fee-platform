@@ -1,6 +1,7 @@
 import Link from "next/link";
 
 export default function HomePage() {
+  const session = "2026/2027";
   return (
     <main>
       {/* Hero */}
@@ -21,8 +22,7 @@ export default function HomePage() {
         >
           <span className="inline-flex items-center gap-2 bg-blue-100 text-blue-700 text-xs font-bold px-4 py-2 rounded-full mb-8 uppercase tracking-widest">
             <span className="w-2 h-2 rounded-full bg-blue-500 animate-pulse" />
-            {new Date().getFullYear() - 1}/{new Date().getFullYear()} Academic
-            Session
+            {session} Academic Session
           </span>
           <h1
             className="font-extrabold text-slate-900 leading-tight mb-6"
@@ -61,8 +61,9 @@ export default function HomePage() {
           </div>
           <div className="inline-flex items-center gap-2 bg-white border border-slate-200 text-slate-400 text-xs px-5 py-2.5 rounded-full shadow-sm">
             <span className="w-2 h-2 rounded-full bg-green-500 animate-pulse" />
-            Fees updated · {new Date().getFullYear() - 1}/
-            {new Date().getFullYear()} session
+            {/* Fees updated · {new Date().getFullYear() - 1}/
+            {new Date().getFullYear()} session */}
+            Fees updated · {session} session
           </div>
         </div>
       </section>
@@ -75,7 +76,7 @@ export default function HomePage() {
               { v: "8", l: "Faculties" },
               { v: "50+", l: "Programmes" },
               {
-                v: `${new Date().getFullYear() - 1}/${new Date().getFullYear()}`,
+                v: `${session}`,
                 l: "Session",
               },
               { v: "100%", l: "Official Data" },

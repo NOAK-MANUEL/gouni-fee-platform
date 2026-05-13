@@ -1,5 +1,5 @@
 "use client";
-import { getLevelsData, getPrograms } from "@/lib/actions";
+import { getLevelsData, getPrograms, saveData } from "@/lib/actions";
 import { fmt, OTHER_FEES } from "@/lib/components/resources";
 import { useEffect, useState } from "react";
 
@@ -58,6 +58,8 @@ export default function FeesPage() {
     //     setFaculties(res.faculties);
     //   }
     // });
+    // saveData().then((e) => console.log("yes"));
+
     getPrograms().then((res) => {
       if (res.success) {
         setPrograms(res.programs);
@@ -67,7 +69,6 @@ export default function FeesPage() {
         setSelLevel(res.programData[0].levels[0].level.toString());
       }
     });
-    // saveData().then(e=>console.log());
   }, []);
   // const selectPrograms = (faculty: string) => {
 
@@ -90,7 +91,7 @@ export default function FeesPage() {
           style={{ animation: "fadeUp 0.6s ease" }}
         >
           <span className="bg-blue-100 text-blue-600 text-xs font-bold px-4 py-1.5 rounded-full uppercase tracking-widest">
-            2025/2026 Session
+            2026/2027 Session
           </span>
           <h1
             className="font-extrabold text-slate-800 mt-4 mb-2"
