@@ -2,7 +2,6 @@
 export default function getOtherRows(selLevel: string, selProgram: string) {
   const level = parseInt(selLevel) || 0;
   const is100L = level === 100;
-  const isFinalYear = level >= 400;
 
   // ── Derive program group from selProgram only ────────────────────────────────
   const isLaw = selProgram === "LL.B. LAW";
@@ -10,6 +9,7 @@ export default function getOtherRows(selLevel: string, selProgram: string) {
   const isMedicine = selProgram === "MEDICINE AND SURGERY";
   const isMedSchool = isNursing || isMedicine;
 
+  const isFinalYear = isLaw ? level === 500 : level === 400;
   const FCIT_PROGRAMS = [
     "COMPUTER SCIENCE",
     "SOFTWARE ENGINEERING",

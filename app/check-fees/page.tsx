@@ -302,13 +302,13 @@ export default function FeesPage() {
                   <strong>⚠ Payment Note:</strong> Fees are sessional (yearly).
                   60% can be paid in 1st semester; 40% balance within 3 months.
                   Additional professional fees (Lab, ICAN, DNALC, etc.) may
-                  apply. Pay only via the official{" "}
+                  apply. Pay only via the official ERP{" "}
                   <a
                     href="https://student.erp.gouni.edu.ng"
                     target="_blank"
                     className="underline font-semibold"
                   >
-                    GOUNI ERP
+                    Click to Pay
                   </a>
                   .
                 </div>
