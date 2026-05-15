@@ -23,7 +23,8 @@ export default function RootLayout({
         <Navbar />
         {children}
         <footer className="text-center   border-t text-sm  border-slate-100 shadow-sm text-white p-3 bg-blue-600 font-bold">
-          Powered By GOUNI ICT Service
+          © {new Date().getFullYear()}All Right Reserved Powered By GOUNI ICT
+          SERVICES
         </footer>
       </body>
     </html>

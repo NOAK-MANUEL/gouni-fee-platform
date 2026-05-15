@@ -1,6 +1,7 @@
 "use client";
-import { getLevelsData, getPrograms, saveData } from "@/lib/actions";
-import { fmt, OTHER_FEES } from "@/lib/components/resources";
+import { getLevelsData, getPrograms } from "@/lib/actions";
+import getOtherRows from "@/lib/components/getOtherRows";
+import { fmt } from "@/lib/components/resources";
 import { useEffect, useState } from "react";
 
 export default function FeesPage() {
@@ -24,7 +25,11 @@ export default function FeesPage() {
     if (!selProgram || !selLevel) return;
     const lvl = parseInt(selLevel);
     const tuition = levels.find((level) => level.level === lvl)?.fee ?? null;
-    const other = OTHER_FEES[lvl] ?? 0;
+    const other =
+      getOtherRows(selLevel, selProgram.toUpperCase()).reduce(
+        (prev, current) => prev + current.amount,
+        0,
+      ) ?? 0;
     setResult({
       tuition,
       other,
@@ -34,24 +39,6 @@ export default function FeesPage() {
     setSearched(true);
   };
 
-  const otherRows = [
-    { label: "Online Course Reg / ICT Fee", amount: 60000 },
-    { label: "Faculty Fee", amount: 5000 },
-    { label: "Departmental Fee", amount: 3000 },
-    { label: "Library Fee", amount: 20000 },
-    {
-      label: "Medical & Drug Test Fee",
-      amount: (parseInt(selLevel) || 0) >= 400 ? 20000 : 10000,
-    },
-    { label: "Parents' Forum Fee", amount: 10000 },
-    { label: "Entrepreneurship Fee", amount: 7000 },
-    { label: "Sports Levy", amount: 5000 },
-    { label: "COHON Fee", amount: 4000 },
-    { label: "Health Insurance", amount: 5000 },
-    { label: "Sanitation", amount: 3000 },
-    { label: "Community Service Levy", amount: 2000 },
-    { label: "Bazaar Levy", amount: 1000 },
-  ];
   useEffect(() => {
     // getFaculties().then((res) => {
     //   if (res.success) {
@@ -291,19 +278,21 @@ export default function FeesPage() {
                         </tr>
                       </thead>
                       <tbody className="divide-y divide-slate-50">
-                        {otherRows.map((r, i) => (
-                          <tr
-                            key={i}
-                            className="hover:bg-blue-50/40 transition"
-                          >
-                            <td className="px-5 sm:px-6 py-3 text-sm text-slate-600">
-                              {r.label}
-                            </td>
-                            <td className="px-5 sm:px-6 py-3 text-sm text-slate-800 font-semibold text-right whitespace-nowrap">
-                              {fmt(r.amount)}
-                            </td>
-                          </tr>
-                        ))}
+                        {getOtherRows(selLevel, selProgram.toUpperCase()).map(
+                          (r, i) => (
+                            <tr
+                              key={i}
+                              className="hover:bg-blue-50/40 transition"
+                            >
+                              <td className="px-5 sm:px-6 py-3 text-sm text-slate-600">
+                                {r.label}
+                              </td>
+                              <td className="px-5 sm:px-6 py-3 text-sm text-slate-800 font-semibold text-right whitespace-nowrap">
+                                {fmt(r.amount)}
+                              </td>
+                            </tr>
+                          ),
+                        )}
                       </tbody>
                     </table>
                   </div>

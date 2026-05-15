@@ -215,8 +215,7 @@ export default function HomePage() {
       <footer className="border-t border-slate-100 bg-white px-4 sm:px-6 py-8">
         <div className="max-w-5xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-4 text-sm text-slate-400">
           <div>
-            © {new Date().getFullYear()} GoUni
-            Fees Portal · Data from{" "}
+            © {new Date().getFullYear()} GoUni Fees Portal · Data from{" "}
             <a
               href="https://gouni.edu.ng/payments/"
               target="_blank"
