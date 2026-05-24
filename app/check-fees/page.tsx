@@ -300,7 +300,7 @@ export default function FeesPage() {
 
                 <div className="bg-amber-50 border border-amber-200 rounded-xl px-5 py-4 text-sm text-amber-800 leading-relaxed mb-3">
                   <strong>⚠ Payment Note:</strong> Fees are sessional (yearly).
-                  60% can be paid in 1st semester; 40% balance within 3 months.
+                  50% can be paid in 1st semester; 50% balance within 3 months.
                   Additional professional fees (Lab, ICAN, DNALC, etc.) may
                   apply. Pay only via the official ERP{" "}
                   <a
