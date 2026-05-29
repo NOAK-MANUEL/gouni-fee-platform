@@ -90,7 +90,7 @@ export default function FeesPage() {
             Fee Finder
           </h1>
           <p className="text-slate-500 text-sm sm:text-base">
-            Select your faculty, programme, and level to view your complete fee
+            Select your programme, and level to view your complete fee
             breakdown.
           </p>
         </div>
@@ -255,6 +255,12 @@ export default function FeesPage() {
                   </div>
                 </div>
 
+                  <div className="bg-red-50 border mb-4 border-red-200 rounded-xl px-5 py-4 text-sm text-red-700 leading-relaxed">
+                  <strong>⛔ Disclaimer:</strong> Godfrey Okoye University
+                  mandates payment through the official ERP only. Never pay to
+                  any personal account.
+                </div>
+
                 {/* Breakdown table */}
                 <div className="bg-white rounded-2xl border border-slate-100 shadow-sm overflow-hidden mb-4">
                   <div className="px-5 sm:px-6 py-4 border-b border-slate-100">
@@ -306,17 +312,13 @@ export default function FeesPage() {
                   <a
                     href="https://student.erp.gouni.edu.ng"
                     target="_blank"
-                    className="underline font-semibold"
+                    className="p-[5px] rounded-lg bg-amber-800 text-white inline-block font-semibold mt-1"
                   >
-                    Click to Pay
+                    Click To Pay
                   </a>
                   .
                 </div>
-                <div className="bg-red-50 border border-red-200 rounded-xl px-5 py-4 text-sm text-red-700 leading-relaxed">
-                  <strong>⛔ Disclaimer:</strong> Godfrey Okoye University
-                  mandates payment through the official ERP only. Never pay to
-                  any personal account.
-                </div>
+              
               </>
             )}
           </div>
