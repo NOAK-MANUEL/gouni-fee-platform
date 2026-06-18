@@ -1,4 +1,5 @@
 "use client";
+import RemoveSearchParams from "@/components/removeSearchParams";
 import { getLevelsData, getPrograms } from "@/lib/actions";
 import getOtherRows from "@/lib/components/getOtherRows";
 import { fmt } from "@/lib/components/resources";
@@ -72,6 +73,7 @@ export default function FeesPage() {
 
   return (
     <main className="min-h-screen bg-slate-50 py-10 px-4 sm:px-6">
+      <RemoveSearchParams/>
       <div className="max-w-3xl mx-auto">
         <div
           className="text-center mb-10"
@@ -312,11 +314,11 @@ export default function FeesPage() {
                   <a
                     href="https://student.erp.gouni.edu.ng"
                     target="_blank"
-                    className="p-[5px] rounded-lg bg-amber-800 text-white inline-block font-semibold mt-1"
+                    className="px-[5px] py-[2px] rounded-lg bg-amber-800 text-white inline-block font-semibold mt-1"
                   >
                     Click To Pay
                   </a>
-                  .
+                  
                 </div>
               
               </>

@@ -1,3 +1,4 @@
+import RemoveSearchParams from "@/components/removeSearchParams";
 import Link from "next/link";
 
 export default function HomePage() {
@@ -5,6 +6,7 @@ export default function HomePage() {
   return (
     <main>
       {/* Hero */}
+      <RemoveSearchParams/>
       <section className="relative overflow-hidden bg-gradient-to-br from-blue-50 via-white to-sky-50 pt-16 pb-24 px-4 sm:px-6">
         <div
           className="absolute inset-0 opacity-30 pointer-events-none"
