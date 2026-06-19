@@ -25,7 +25,7 @@ export default function EditFee({
   const handleSaveFee = async () => {
     if (!editVal) return;
     setLoading(true);
-    const res = await changeFee(program, Number(level.level), BigInt(editVal));
+    const res = await changeFee(program, Number(level.level), Number(editVal));
     setLoading(false);
     if (!res.success) return setAddErr(res.message);
     setProgram((prev) =>
@@ -36,7 +36,7 @@ export default function EditFee({
             l.level === level.level
               ? {
                   ...l,
-                  fee: BigInt(editVal),
+                  fee: Number(editVal),
                 }
               : l,
           ),

@@ -51,7 +51,6 @@ export default function FeesPage() {
     getPrograms().then((res) => {
       
       if (res.success) {
-        console.log("success", res.programs);
         
         setPrograms(res.programs);
         //  setSelFaculty(faculty);

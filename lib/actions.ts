@@ -217,7 +217,7 @@ export const createAdmin = async (
 export const changeFee = async (
   program: string,
   level: number,
-  fee: bigint,
+  fee: number,
 ): Promise<AdminResponse> => {
   try {
     if (!program || !level || !fee || fee <= 0)
