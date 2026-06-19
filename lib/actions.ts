@@ -3,6 +3,7 @@
 import { FACULTIES } from "@/lib/components/faculties";
 import prismaClient from "@/lib/prisma";
 import bcrypt from "bcrypt";
+import { revalidateTag, unstable_cache } from "next/cache";
 import { cookies } from "next/headers";
 
 export type FacultyData = { name: string; _count: { programs: number } };
@@ -24,7 +25,7 @@ type ProgramResponse =
     }
   | { success: false; message: string };
 export type Level = {
-  fee: bigint;
+  fee: number;
   level: number;
   // program: { faculty_name: string };
 };
@@ -57,7 +58,7 @@ export const getFaculties = async (): Promise<FacultyResponse> => {
     return sendError(error as Error) as FacultyResponse;
   }
 };
-export const getPrograms = async (
+export const getPrograms = unstable_cache( async (
   faculty?: string,
 ): Promise<ProgramResponse> => {
   try {
@@ -89,13 +90,20 @@ export const getPrograms = async (
     return {
       success: true,
       programs: programs.map((faculty) => faculty.name),
-      programData: programs,
+      programData: programs.map((p) => ({
+    ...p,
+    levels: p.levels.map((l) => ({
+      ...l,
+      fee: Number(l.fee), // convert BigInt → number
+    })),
+  })),
+
     };
   } catch (error) {
     return sendError(error as Error) as ProgramResponse;
   }
-};
-export const getLevelsData = async (
+},["programs-cache"],{revalidate:60*60*24 , tags: ["programs-cache"]});
+export const getLevelsData =  async (
   program: string,
 ): Promise<LevelResponse> => {
   try {
@@ -113,7 +121,7 @@ export const getLevelsData = async (
     });
     return {
       success: true,
-      levels,
+      levels: levels.map((lev)=>({...lev, fee: Number(lev.fee)})),
     };
   } catch (error) {
     return sendError(error as Error) as LevelResponse;
@@ -237,6 +245,8 @@ export const changeFee = async (
         id: f?.id,
       },
     });
+    revalidateTag("programs-cache","default")
+
     return {
       success: true,
     };

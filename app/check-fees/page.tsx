@@ -7,12 +7,12 @@ import { useEffect, useState } from "react";
 
 export default function FeesPage() {
   interface ResultType {
-    tuition: bigint | null;
+    tuition: number | null;
     lvl: number;
     other: number;
-    total: bigint | number;
+    total:  number;
   }
-  type Level = { fee: bigint; level: number };
+  type Level = { fee: number; level: number };
 
   // const [selFaculty, setSelFaculty] = useState("");
   const [selProgram, setSelProgram] = useState("");
@@ -34,7 +34,7 @@ export default function FeesPage() {
     setResult({
       tuition,
       other,
-      total: tuition != null ? tuition + BigInt(other) : 0,
+      total: tuition != null ? tuition + other : 0,
       lvl,
     });
     setSearched(true);
